@@ -1,0 +1,40 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+  GUTENBERG: https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv
+  GBFETCH: https://www.gutenberg.org/ebooks/
+  GBEXT: .txt.utf-8
+menu:
+  - search
+  - fetch
+  - convert2yaml
+  - repo 
+  - exit
+tasks:
+  foo:
+    vars:
+      CALCULATED_VAR: '$echo {{.GREETING}}'
+    cmds:
+      - 'echo {{.CALCULATED_VAR}}'
+  default:
+    cmds:
+      - task $(cat Taskfile.yml | yq '.menu.[]' | fzf)
+    silent: true
+  search:
+    cmds:
+      - cat 'pg_catalog.csv'|fzf -m 
+  fetch:
+    cmds:
+      - wget -w 2 -m -H "{{.GBFETCH}}3024{{.GBEXT}}" -O 3024.txt
+  convert2yaml:
+    cmds:
+      - yq -oy pg_catalog.csv > pg.yaml # converts the csv file to yaml for faster parsing
+  repo:
+    cmds:
+      - curl {{.GUTENBERG}} -o pg_catalog.csv
+  exit:
+    cmds:
+      - exit
