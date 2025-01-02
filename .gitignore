@@ -1,3 +1,4 @@
 www.gutenberg.org
-pg_catalog.csv
-pg.yaml
+*.csv
+*.yaml
+output

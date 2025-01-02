@@ -3,32 +3,21 @@
 version: '3'
 
 vars:
-  GREETING: Hello, World!
   GUTENBERG: https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv
   GBFETCH: https://www.gutenberg.org/ebooks/
   GBEXT: .txt.utf-8
-menu:
-  - search
-  - fetch
-  - convert2yaml
-  - repo 
-  - exit
+  OUTPUT_DIR: output
 tasks:
-  foo:
-    vars:
-      CALCULATED_VAR: '$echo {{.GREETING}}'
-    cmds:
-      - 'echo {{.CALCULATED_VAR}}'
   default:
     cmds:
-      - task $(cat Taskfile.yml | yq '.menu.[]' | fzf)
+      - task $(cat Taskfile.yml | yq '.tasks | keys.[]' | fzf)
     silent: true
   search:
     cmds:
-      - cat 'pg_catalog.csv'|fzf -m 
+      - cat 'pg_catalog.csv'|fzf -m | awk -F, '{print $6"---"$4}'
   fetch:
     cmds:
-      - wget -w 2 -m -H "{{.GBFETCH}}3024{{.GBEXT}}" -O 3024.txt
+      - cat 'pg_catalog.csv'|fzf -m | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
   convert2yaml:
     cmds:
       - yq -oy pg_catalog.csv > pg.yaml # converts the csv file to yaml for faster parsing
