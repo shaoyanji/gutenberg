@@ -14,12 +14,12 @@ tasks:
     silent: true
   search:
     cmds:
-      #- ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print $6"-"$4}'
-      - cat 'pg_catalog.csv' | fzf | awk -F, '{print $6"-"$4}'
+      - ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print $6"-"$4}'
+      #- cat 'pg_catalog.csv' | fzf | awk -F, '{print $6"-"$4}'
   fetch:
     cmds:
-      #- ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
-      - cat 'pg_catalog.csv' | fzf | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
+      - ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
+      #- cat 'pg_catalog.csv' | fzf | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
   convert2yaml:
     cmds:
       - yq -oy pg_catalog.csv > pg.yaml # converts the csv file to yaml for faster parsing
