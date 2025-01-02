@@ -14,10 +14,10 @@ tasks:
     silent: true
   search:
     cmds:
-      - cat 'pg_catalog.csv'|fzf -m | awk -F, '{print $6"---"$4}'
+      - ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print $6"-"$4}'
   fetch:
     cmds:
-      - cat 'pg_catalog.csv'|fzf -m | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
+      - ./bin/fzgrep cat 'pg_catalog.csv' | awk -F, '{print "{{.GBFETCH}}"$1"{{.GBEXT}} -O {{.OUTPUT_DIR}}/"$1".txt"}' | xargs wget -w 2 -m -H 
   convert2yaml:
     cmds:
       - yq -oy pg_catalog.csv > pg.yaml # converts the csv file to yaml for faster parsing
