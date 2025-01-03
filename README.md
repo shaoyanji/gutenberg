@@ -20,5 +20,8 @@ the following command will download the catalog of books from gutenberg run week
 ```bash
 curl https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv
 ```
-
+in limited server environments, the following bash might prove to be useful for document retrieval:
+```bash
+cat pg_catalog.csv | fzf | awk -F, '{print "https://www.gutenberg.org/ebooks/"$1".txt.utf-8"}'| xargs wget -w 2 -m -H
+```
 
