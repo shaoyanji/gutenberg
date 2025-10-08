@@ -2,4 +2,3 @@ www.gutenberg.org
 *.csv
 *.yaml
 output
-@eaDir/
