@@ -1,6 +1,6 @@
 # Gutenberg EBook fetcher
 export def gb [] {
-  scope commands | where name starts-with "gb " | get name | input list | command nu -c $"source gutenberg.nu; ($in)"
+  scope commands | where name starts-with "gb " | get name | input list | nu -c $"source gutenberg.nu; ($in)"
 }
 # saves file as text.txt
 export def "gb save" [] {
