@@ -14,9 +14,10 @@ gb dl | split row -r '\*\*\*' | get 2
 export def "gb search" [] {
   open pg_catalog.csv | input list -f -d Title
 }
-# updates gutenberg index
+# updates gutenberg catalog, does require extract
 export def "gb update" [] {
-  http get https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv | save pg_catalog.csv -f
+  http get https://www.gutenberg.org/cache/epub/feeds/pg_catalog.csv.gz | save pg_catalog.csv.gz -f;
+  extract pg_catalog.csv.gz
 }
 # downloads using nushell method
 export def "gb dl" [] {
