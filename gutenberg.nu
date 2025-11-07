@@ -23,3 +23,15 @@ export def "gb update" [] {
 export def "gb dl" [] {
   gb search | http get $"https://www.gutenberg.org/ebooks/($in.Text#).txt.utf-8"
 }
+
+# german audiobooks, requires htmlq
+export def "gb abde" [] {
+  open pg_catalog.csv
+    | where Type == "Sound"
+    | where Language == de
+    | input list -f -d Title
+    | http get $"https://www.gutenberg.org/ebooks/($in.Text#)"
+    | htmlq body -t -w -a href a | split row "\n"
+    | each { if ($in | str contains 'https://') {} else {str replace -r '^' 'https://gutenberg.org' }}
+    | input list -f
+}
