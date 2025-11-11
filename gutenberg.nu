@@ -35,3 +35,20 @@ export def "gb abde" [] {
     | each { if ($in | str contains 'https://') {} else {str replace -r '^' 'https://gutenberg.org' }}
     | input list -f
 }
+# alternative with mdq and html2markdown
+export def "gb abde2" [] {
+  open pg_catalog.csv
+    | where Type == "Sound"
+    | where Language == de
+    | input list -f -d Title
+    | http get $"https://www.gutenberg.org/ebooks/($in.Text#)"
+    | html2markdown
+    | mdq '```' -l inline
+    | split row "```"
+    | get 1
+    | mdq '[]()' -l inline -o json
+    | from json
+    | flatten | flatten | flatten
+    | get url
+    | input list -f
+}
